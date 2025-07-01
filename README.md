@@ -1,10 +1,10 @@
-# ðŸ… Laravel Notification Channel for IssueBadge
+# Laravel Notification Channel for IssueBadge
 
 This package makes it easy to send developer badges or certificates via [IssueBadge](https://issuebadge.com) using Laravel's notification system.
 
 ---
 
-## ðŸ“¦ Installation
+## Installation
 
 Install the package via Composer:
 
@@ -25,7 +25,7 @@ If using a local development path:
 
 ---
 
-## âš™ï¸ Configuration
+##  Configuration
 
 Add your IssueBadge API key to your `.env` file:
 
@@ -41,7 +41,7 @@ php artisan vendor:publish --tag=issuebadge-config
 
 ---
 
-## âœ‰ï¸ Usage
+##  Usage
 
 You can now send badges using Laravel notifications:
 
@@ -77,7 +77,7 @@ $user->notify(new BadgeNotification());
 
 ---
 
-## ðŸ§© Service Provider
+## Service Provider
 
 The service provider will be auto-discovered in Laravel 5.5+.
 
@@ -91,19 +91,19 @@ If using manually, register it in `config/app.php`:
 
 ---
 
-## âœ… Testing
+##  Testing
 
 You can test by creating a dummy Laravel app and triggering a notification with a test badge ID and email.
 
 ---
 
-## ðŸ™Œ Credits
+##  Credits
 
 - Developed by [IssueBadge](https://issuebadge.com)
 - Inspired by the Laravel Notification Channel Skeleton
 
 ---
 
-## ðŸ“„ License
+##  License
 
 The MIT License (MIT). Please see [License File](LICENSE) for more information.
