@@ -1,78 +1,109 @@
-Please see [this repo](https://github.com/laravel-notification-channels/channels) for instructions on how to submit a channel proposal.
+# ðŸ… Laravel Notification Channel for IssueBadge
 
-# A Boilerplate repo for contributions
+This package makes it easy to send developer badges or certificates via [IssueBadge](https://issuebadge.com) using Laravel's notification system.
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/laravel-notification-channels/:package_name.svg?style=flat-square)](https://packagist.org/packages/laravel-notification-channels/:package_name)
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
-[![Build Status](https://img.shields.io/travis/laravel-notification-channels/:package_name/master.svg?style=flat-square)](https://travis-ci.org/laravel-notification-channels/:package_name)
-[![StyleCI](https://styleci.io/repos/:style_ci_id/shield)](https://styleci.io/repos/:style_ci_id)
-[![SensioLabsInsight](https://img.shields.io/sensiolabs/i/:sensio_labs_id.svg?style=flat-square)](https://insight.sensiolabs.com/projects/:sensio_labs_id)
-[![Quality Score](https://img.shields.io/scrutinizer/g/laravel-notification-channels/:package_name.svg?style=flat-square)](https://scrutinizer-ci.com/g/laravel-notification-channels/:package_name)
-[![Code Coverage](https://img.shields.io/scrutinizer/coverage/g/laravel-notification-channels/:package_name/master.svg?style=flat-square)](https://scrutinizer-ci.com/g/laravel-notification-channels/:package_name/?branch=master)
-[![Total Downloads](https://img.shields.io/packagist/dt/laravel-notification-channels/:package_name.svg?style=flat-square)](https://packagist.org/packages/laravel-notification-channels/:package_name)
+---
 
-This package makes it easy to send notifications using [:service_name](link to service) with Laravel 10.x.
+## ðŸ“¦ Installation
 
-**Note:** Replace ```:channel_namespace``` ```:service_name``` ```:author_name``` ```:author_username``` ```:author_website``` ```:author_email``` ```:package_name``` ```:package_description``` ```:style_ci_id``` ```:sensio_labs_id``` with their correct values in [README.md](README.md), [CHANGELOG.md](CHANGELOG.md), [CONTRIBUTING.md](CONTRIBUTING.md), [LICENSE.md](LICENSE.md), [composer.json](composer.json) and other files, then delete this line.
-**Tip:** Use "Find in Path/Files" in your code editor to find these keywords within the package directory and replace all occurences with your specified term.
+Install the package via Composer:
 
-This is where your description should go. Add a little code example so build can understand real quick how the package can be used. Try and limit it to a paragraph or two.
-
-
-
-## Contents
-
-- [Installation](#installation)
-	- [Setting up the :service_name service](#setting-up-the-:service_name-service)
-- [Usage](#usage)
-	- [Available Message methods](#available-message-methods)
-- [Changelog](#changelog)
-- [Testing](#testing)
-- [Security](#security)
-- [Contributing](#contributing)
-- [Credits](#credits)
-- [License](#license)
-
-
-## Installation
-
-Please also include the steps for any third-party service setup that's required for this package.
-
-### Setting up the :service_name service
-
-Optionally include a few steps how users can set up the service.
-
-## Usage
-
-Some code examples, make it clear how to use the package
-
-### Available Message methods
-
-A list of all available options
-
-## Changelog
-
-Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
-
-## Testing
-
-``` bash
-$ composer test
+```bash
+composer require issuebadge/laravel-notification-channel
 ```
 
-## Security
+If using a local development path:
 
-If you discover any security related issues, please email :author_email instead of using the issue tracker.
+```json
+"repositories": [
+  {
+    "type": "path",
+    "url": "../laravel-notification-channel-issuebadge"
+  }
+]
+```
 
-## Contributing
+---
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+## âš™ï¸ Configuration
 
-## Credits
+Add your IssueBadge API key to your `.env` file:
 
-- [:author_name](https://github.com/:author_username)
-- [All Contributors](../../contributors)
+```env
+ISSUEBADGE_API_KEY=your_api_key_here
+```
 
-## License
+Then optionally publish the config:
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+```bash
+php artisan vendor:publish --tag=issuebadge-config
+```
+
+---
+
+## âœ‰ï¸ Usage
+
+You can now send badges using Laravel notifications:
+
+### Step 1: Create a Notification
+
+```php
+use Illuminate\Notifications\Notification;
+use NotificationChannels\IssueBadge\IssueBadgeMessage;
+
+class BadgeNotification extends Notification
+{
+    public function via($notifiable)
+    {
+        return ['issuebadge'];
+    }
+
+    public function toIssueBadge($notifiable)
+    {
+        return IssueBadgeMessage::create(
+            $notifiable->name,
+            $notifiable->email,
+            'W238GD8PK' // your badge ID
+        );
+    }
+}
+```
+
+### Step 2: Send Notification
+
+```php
+$user->notify(new BadgeNotification());
+```
+
+---
+
+## ðŸ§© Service Provider
+
+The service provider will be auto-discovered in Laravel 5.5+.
+
+If using manually, register it in `config/app.php`:
+
+```php
+'providers' => [
+    NotificationChannels\IssueBadge\IssueBadgeServiceProvider::class,
+],
+```
+
+---
+
+## âœ… Testing
+
+You can test by creating a dummy Laravel app and triggering a notification with a test badge ID and email.
+
+---
+
+## ðŸ™Œ Credits
+
+- Developed by [IssueBadge](https://issuebadge.com)
+- Inspired by the Laravel Notification Channel Skeleton
+
+---
+
+## ðŸ“„ License
+
+The MIT License (MIT). Please see [License File](LICENSE) for more information.
